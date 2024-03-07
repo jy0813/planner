@@ -1,5 +1,6 @@
 .calendarDashboard {
-  width: 80rem;
+  width: 100%;
+  padding: 4rem;
   margin: 0 auto;
 
   .header {
@@ -65,14 +66,42 @@
       grid-template-columns: repeat(7, 1fr);
 
       .col {
-        height: 6rem;
+        display: flex;
+        justify-content: flex-end;
+        height: 12rem;
         padding: 0.2rem 0.6rem;
         border: 0.1rem solid #ccc;
         font-size: 1.6rem;
-        text-align: right;
+        cursor: pointer;
+
+        &.selected {
+          background-color: #adccf3;
+          color: #fff;
+        }
+
+        &.sunday {
+          color: #ff0000;
+          background-color: #ffefef;
+        }
+
+        // &.saturday {
+        //   color: #1479eb;
+        //   background-color: #e4effa;
+        // }
 
         &.hidden {
           color: transparent;
+        }
+
+        .today {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 2rem;
+          height: 2rem;
+          background-color: #1479eb;
+          color: #fff;
+          border-radius: 50%;
         }
       }
     }
