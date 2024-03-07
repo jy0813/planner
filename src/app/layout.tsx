@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import PortalWrap from "@/components/PortalWrap/PortalWrap";
 import Toast from "@/components/Toast/Toast";
+import { MSWComponent } from "@/libs/MSWComponent/MSWComponent";
+import SSRQueryClientProvider from "@/libs/ReactQuery/SSRQueryClientProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,9 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
-        <PortalWrap />
-        <Toast />
+        <SSRQueryClientProvider>
+          <MSWComponent />
+          {children}
+          <PortalWrap />
+          <Toast />
+        </SSRQueryClientProvider>
       </body>
     </html>
   );
