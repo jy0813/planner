@@ -156,3 +156,8 @@ select {
 select::-ms-expand {
   display: none;
 }
+
+#toast {
+  z-index: 10;
+  position: fixed;
+}

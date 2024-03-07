@@ -13,6 +13,9 @@ import {
 import { addMonths, format, isToday, subMonths } from "date-fns";
 import styles from "./CalendarDashboard.module.scss";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/useToast";
+import { FaArrowAltCircleLeft, FaRegArrowAltCircleRight } from "react-icons/fa";
+import { FaArrowAltCircleRight } from "react-icons/fa";
 
 type CalendarContextType = ReturnType<typeof useCalendar>;
 const CalendarContext = createContext<CalendarContextType | undefined>(
@@ -63,9 +66,13 @@ const CalendarHeader = () => {
         </h4>
       </div>
       <div className={styles.currentArea}>
-        <button onClick={prevMonthMove}>이전</button>
+        <button onClick={prevMonthMove}>
+          <FaArrowAltCircleLeft />
+        </button>
         <h3>{format(currentDate, "yyyy년 M월")}</h3>
-        <button onClick={nextMonthMove}>다음</button>
+        <button onClick={nextMonthMove}>
+          <FaArrowAltCircleRight />
+        </button>
       </div>
     </div>
   );
@@ -94,6 +101,7 @@ const CalendarBody = () => {
   const { weekCalendarList, currentDate } = useCalendarContext();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const router = useRouter();
+  const { showToast } = useToast();
 
   const handleCtrlClick = (e: MouseEvent<HTMLDivElement>, date: Date) => {
     if (e.ctrlKey || e.metaKey) {
@@ -124,19 +132,30 @@ const CalendarBody = () => {
 
   const handleCtrlRelease = useCallback(
     (e: KeyboardEvent) => {
+      const formattedDates = selectedDates.map((date) =>
+        format(date, "yyyy-MM-dd HH:mm")
+      );
       if (
         (e.key === "Control" || e.key === "Meta") &&
         selectedDates.length === 1
       ) {
         router.push(`/task`);
+        showToast(
+          "success",
+          `${formattedDates.join(", ")} 일정으로 이동합니다.`
+        );
       } else if (
         (e.key === "Control" || e.key === "Meta") &&
         selectedDates.length > 1
       ) {
         router.push(`/tasks`);
+        showToast(
+          "success",
+          `${formattedDates.join(", ")} 일정으로 이동합니다.`
+        );
       }
     },
-    [selectedDates, router]
+    [selectedDates, router, showToast]
   );
 
   useEffect(() => {
