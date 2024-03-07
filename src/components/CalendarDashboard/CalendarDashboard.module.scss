@@ -1,0 +1,80 @@
+.calendarDashboard {
+  width: 80rem;
+  margin: 0 auto;
+
+  .header {
+    display: flex;
+    align-items: center;
+
+    .todayArea {
+      h4 {
+        font-size: 1.6rem;
+      }
+
+      button {
+        display: flex;
+        align-items: center;
+        .border {
+          display: inline-flex;
+          width: 2rem;
+          height: 2rem;
+          margin-right: 1rem;
+          border-radius: 50%;
+          background-color: #1479eb;
+        }
+      }
+    }
+
+    .currentArea {
+      display: flex;
+      align-items: center;
+      font-size: 1.6rem;
+
+      button {
+        margin: 1rem;
+      }
+    }
+  }
+
+  .nav {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-top: 2rem;
+    .col {
+      font-size: 1.6rem;
+      text-align: center;
+
+      &.saturday {
+        color: #1479eb;
+      }
+
+      &.sunday {
+        color: #ff0000;
+      }
+    }
+  }
+
+  .body {
+    display: grid;
+    grid-template-rows: repeat(7, min-content);
+    grid-auto-flow: column;
+    margin-top: 2rem;
+    border: 0.1rem solid #ccc;
+    .row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+
+      .col {
+        height: 6rem;
+        padding: 0.2rem 0.6rem;
+        border: 0.1rem solid #ccc;
+        font-size: 1.6rem;
+        text-align: right;
+
+        &.hidden {
+          color: transparent;
+        }
+      }
+    }
+  }
+}
