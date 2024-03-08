@@ -18,6 +18,7 @@ import { FaArrowAltCircleLeft, FaRegArrowAltCircleRight } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { getCalendarData } from "@/service/getCalendarData";
+import { CalendarData } from "@/types/calendar";
 
 type CalendarContextType = ReturnType<typeof useCalendar>;
 const CalendarContext = createContext<CalendarContextType | undefined>(
@@ -102,7 +103,7 @@ const CalenderDays = () => {
 const CalendarBody = () => {
   const { weekCalendarList, currentDate } = useCalendarContext();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-  const { data: calendarData } = useQuery({
+  const { data: calendarData } = useQuery<CalendarData[]>({
     queryKey: ["calendar"],
     queryFn: getCalendarData,
     staleTime: 60 * 1000,
@@ -198,6 +199,13 @@ const CalendarBody = () => {
                 selectedDate.getMonth() === date.getMonth() &&
                 selectedDate.getFullYear() === date.getFullYear()
             );
+
+            const dateData = calendarData?.find(
+              (data) =>
+                format(new Date(data.date), "yyyy-MM-dd") ===
+                format(date, "yyyy-MM-dd")
+            );
+
             return (
               <div
                 key={j}
@@ -206,9 +214,54 @@ const CalendarBody = () => {
                   j === 0 ? styles.sunday : j === 6 ? styles.saturday : ""
                 } ${isSelected ? styles.selected : ""}`}
               >
-                <span className={`${isCurrentDay ? styles.today : ""}`}>
+                <span
+                  className={`${isCurrentDay ? styles.today : ""} ${
+                    styles.day
+                  }`}
+                >
                   {day}
                 </span>
+                {dateData && (
+                  <div className={styles.calendarDataArea}>
+                    <div className={styles.memoArea}>
+                      {dateData.memo.map((memo) => (
+                        <div key={memo.id}>{memo.text}</div>
+                      ))}
+                    </div>
+                    <div className={styles.reservationInfoArea}>
+                      <div>
+                        예약{" "}
+                        <span
+                          className={`${
+                            dateData.reservation !== 0 ? styles.reservation : ""
+                          }`}
+                        >
+                          {dateData.reservation}
+                        </span>
+                      </div>
+                      <div>
+                        취소{" "}
+                        <span
+                          className={`${
+                            dateData.canceled !== 0 ? styles.canceled : ""
+                          }`}
+                        >
+                          {dateData.canceled}
+                        </span>
+                      </div>
+                      <div>
+                        노쇼{" "}
+                        <span
+                          className={`${
+                            dateData.noShow !== 0 ? styles.noShow : ""
+                          }`}
+                        >
+                          {dateData.noShow}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
