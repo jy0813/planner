@@ -10,7 +10,7 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import { addMonths, format, isToday, subMonths } from "date-fns";
+import { addMonths, format, isToday, setDate, subMonths } from "date-fns";
 import styles from "./CalendarDashboard.module.scss";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
@@ -139,6 +139,16 @@ const CalendarBody = () => {
         showToast("error", "최대 5일간 일정만 볼 수 있습니다.");
         setSelectedDates([]);
       }
+    } else {
+      const newSelectedDates = date === selectedDates[0] ? [] : [date];
+
+      setSelectedDates(newSelectedDates);
+
+      const formattedDates = newSelectedDates.map((date) =>
+        format(date, "yyyy-MM-dd HH:mm")
+      );
+
+      router.push(`/task/${formattedDates[0]}`);
     }
   };
 
