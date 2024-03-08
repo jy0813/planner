@@ -148,7 +148,11 @@ const CalendarBody = () => {
         format(date, "yyyy-MM-dd HH:mm")
       );
 
-      router.push(`/task/${formattedDates[0]}`);
+      console.log(formattedDates);
+
+      showToast("success", `${formattedDates.join(", ")} 일정으로 이동합니다.`);
+
+      router.push(`/task`);
     }
   };
 
