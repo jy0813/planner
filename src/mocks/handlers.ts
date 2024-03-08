@@ -88,7 +88,7 @@ const CalendarData = [
 ];
 
 export const handlers = [
-  http.get("/api/calendar", ({ request }) => {
+  http.get("/api/calendar", ({}) => {
     return HttpResponse.json(CalendarData);
   }),
 ];

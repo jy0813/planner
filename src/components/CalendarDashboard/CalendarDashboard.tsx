@@ -16,6 +16,8 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
 import { FaArrowAltCircleLeft, FaRegArrowAltCircleRight } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import { getCalendarData } from "@/service/getCalendarData";
 
 type CalendarContextType = ReturnType<typeof useCalendar>;
 const CalendarContext = createContext<CalendarContextType | undefined>(
@@ -100,6 +102,14 @@ const CalenderDays = () => {
 const CalendarBody = () => {
   const { weekCalendarList, currentDate } = useCalendarContext();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+  const { data: calendarData } = useQuery({
+    queryKey: ["calendar"],
+    queryFn: getCalendarData,
+    staleTime: 60 * 1000,
+    gcTime: 300 * 1000,
+  });
+
+  console.log(calendarData);
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -124,7 +134,7 @@ const CalendarBody = () => {
       } else if (selectedDates.length < 5) {
         setSelectedDates([...selectedDates, date]);
       } else {
-        alert("최대 5일간 일정만 볼 수 있습니다.");
+        showToast("error", "최대 5일간 일정만 볼 수 있습니다.");
         setSelectedDates([]);
       }
     }
