@@ -10,6 +10,7 @@ const PortalWrap = () => {
   const classNames = cx(styles[stack[0]?.position]);
   return (
     <>
+      <div id="dialog"></div>
       <div id="toast" className={classNames}></div>
     </>
   );

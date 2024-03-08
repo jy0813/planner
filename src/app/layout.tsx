@@ -5,6 +5,7 @@ import PortalWrap from "@/components/PortalWrap/PortalWrap";
 import Toast from "@/components/Toast/Toast";
 import { MSWComponent } from "@/mocks/MSWComponent";
 import SSRQueryClientProvider from "@/libs/ReactQuery/SSRQueryClientProvider";
+import Dialog from "@/components/Dialog/Dialog";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
           {children}
           <PortalWrap />
           <Toast />
+          <Dialog />
         </SSRQueryClientProvider>
       </body>
     </html>
