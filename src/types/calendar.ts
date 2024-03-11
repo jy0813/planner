@@ -9,5 +9,6 @@ export interface CalendarData {
   reservation: number;
   canceled: number;
   noShow: number;
+  isClosed: boolean;
   memo: Memo[];
 }

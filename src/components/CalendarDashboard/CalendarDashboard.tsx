@@ -112,7 +112,6 @@ const CalendarBody = () => {
     gcTime: 300 * 1000,
   });
 
-  console.log(calendarData);
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -223,12 +222,24 @@ const CalendarBody = () => {
                 format(date, "yyyy-MM-dd")
             );
 
+            const isCloseDays = calendarData
+              ?.filter((data) => data.isClosed)
+              .some(
+                (closeDay) =>
+                  format(new Date(closeDay.date), "yyyy-MM-dd") ===
+                  format(date, "yyyy-MM-dd")
+              );
+
             return (
               <div
                 key={j}
                 onClick={(e) => handleCtrlClick(e, date)}
                 className={`${styles.col} ${
-                  j === 0 ? styles.sunday : j === 6 ? styles.saturday : ""
+                  j === 0 || isCloseDays
+                    ? styles.sunday
+                    : j === 6
+                    ? styles.saturday
+                    : ""
                 } ${isSelected ? styles.selected : ""}`}
               >
                 <span
