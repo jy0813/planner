@@ -104,6 +104,7 @@ const CalenderDays = () => {
 const CalendarBody = () => {
   const { weekCalendarList, currentDate } = useCalendarContext();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+  const [showMemoBox, setShowMemoBox] = useState(true);
   const { data: calendarData } = useQuery<CalendarData[]>({
     queryKey: ["calendar"],
     queryFn: getCalendarData,
@@ -116,6 +117,7 @@ const CalendarBody = () => {
   const { showToast } = useToast();
 
   const handleCtrlClick = (e: MouseEvent<HTMLDivElement>, date: Date) => {
+    setShowMemoBox(false);
     if (e.ctrlKey || e.metaKey) {
       const isSelected = selectedDates.some(
         (selectedDate) =>
@@ -141,7 +143,6 @@ const CalendarBody = () => {
       }
     } else {
       const newSelectedDates = date === selectedDates[0] ? [] : [date];
-
       setSelectedDates(newSelectedDates);
 
       const formattedDates = newSelectedDates.map((date) =>
@@ -158,6 +159,7 @@ const CalendarBody = () => {
 
   const handleCtrlRelease = useCallback(
     (e: KeyboardEvent) => {
+      setShowMemoBox(true);
       const formattedDates = selectedDates.map((date) =>
         format(date, "yyyy-MM-dd HH:mm")
       );
@@ -238,6 +240,13 @@ const CalendarBody = () => {
                 </span>
                 {dateData && (
                   <div className={styles.calendarDataArea}>
+                    {dateData.memo.length > 0 && showMemoBox && (
+                      <div className={styles.hoverBox}>
+                        {dateData.memo.map((memo) => (
+                          <div key={memo.id}>{memo.text}</div>
+                        ))}
+                      </div>
+                    )}
                     <div className={styles.memoArea}>
                       {dateData.memo.map((memo) => (
                         <div key={memo.id}>{memo.text}</div>

@@ -114,11 +114,44 @@
           }
         }
 
+        &:hover {
+          .calendarDataArea {
+            .hoverBox {
+              position: absolute;
+              display: block;
+              width: 100%;
+              top: -10rem;
+              padding: 1rem 1.6rem;
+              background-color: #e4effa;
+              font-size: 1.4rem;
+
+              &:after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border: 2rem solid transparent;
+                border-top-color: #e4effa;
+                border-bottom: 0;
+                border-left: 0;
+                margin-left: -1rem;
+                margin-bottom: -2rem;
+              }
+            }
+          }
+        }
+
         .calendarDataArea {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           width: 100%;
+
+          .hoverBox {
+            display: none;
+          }
 
           .memoArea {
             overflow: hidden;
