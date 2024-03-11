@@ -11,6 +11,7 @@ const PortalWrap = () => {
   return (
     <>
       <div id="dialog"></div>
+      <div id="modal"></div>
       <div id="toast" className={classNames}></div>
     </>
   );
