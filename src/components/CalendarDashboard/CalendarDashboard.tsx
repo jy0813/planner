@@ -117,6 +117,7 @@ const CalendarBody = () => {
 
   const handleCtrlClick = (e: MouseEvent<HTMLDivElement>, date: Date) => {
     setShowMemoBox(false);
+
     if (e.ctrlKey || e.metaKey) {
       const isSelected = selectedDates.some(
         (selectedDate) =>
@@ -147,8 +148,6 @@ const CalendarBody = () => {
       const formattedDates = newSelectedDates.map((date) =>
         format(date, "yyyy-MM-dd HH:mm")
       );
-
-      console.log(formattedDates);
 
       showToast("success", `${formattedDates.join(", ")} 일정으로 이동합니다.`);
 

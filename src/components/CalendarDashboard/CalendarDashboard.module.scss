@@ -82,6 +82,11 @@
         &.selected {
           background-color: #adccf3;
           color: #fff;
+
+          &.sunday {
+            background-color: #adccf3;
+            color: #fff;
+          }
         }
 
         &.sunday {
