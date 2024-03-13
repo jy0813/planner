@@ -146,12 +146,13 @@ const CalendarBody = () => {
       setSelectedDates(newSelectedDates);
 
       const formattedDates = newSelectedDates.map((date) =>
-        format(date, "yyyy-MM-dd HH:mm")
+        format(date, "yyyy-MM-dd")
       );
 
       showToast("success", `${formattedDates.join(", ")} 일정으로 이동합니다.`);
 
-      router.push(`/task`);
+      const targetDate = formattedDates[0].replace(/-/g, "");
+      router.push(`/task?date=${targetDate}`);
     }
   };
 
@@ -159,13 +160,15 @@ const CalendarBody = () => {
     (e: KeyboardEvent) => {
       setShowMemoBox(true);
       const formattedDates = selectedDates.map((date) =>
-        format(date, "yyyy-MM-dd HH:mm")
+        format(date, "yyyy-MM-dd")
       );
       if (
         (e.key === "Control" || e.key === "Meta") &&
         selectedDates.length === 1
       ) {
-        router.push(`/task`);
+        const targetDate = formattedDates[0].replace(/-/g, "");
+        router.push(`/task?date=${targetDate}`);
+
         showToast(
           "success",
           `${formattedDates.join(", ")} 일정으로 이동합니다.`
