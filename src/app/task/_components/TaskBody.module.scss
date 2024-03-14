@@ -1,6 +1,7 @@
 .datePaginationWrap {
   display: flex;
   justify-content: center;
+  margin-top: 3rem;
 
   .prevButton,
   .nextButton {
@@ -25,8 +26,9 @@
 
       &.currentDate {
         background-color: #adccf3;
-        color: #fff;
         border-radius: 50%;
+        font-weight: 700;
+        color: #fff;
 
         &.holiday {
           background-color: #ffefef;
@@ -69,5 +71,22 @@
         color: #fff;
       }
     }
+  }
+}
+
+.taskListWrap {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-top: 10rem;
+  border: 0.1rem solid #000;
+
+  .col {
+    position: relative;
+    display: flex;
+    height: 12rem;
+    padding: 0.2rem 1.6rem 0.2rem 0.6rem;
+    border: 0.1rem solid #ccc;
+    font-size: 1.6rem;
+    cursor: pointer;
   }
 }

@@ -29,6 +29,10 @@ const TaskBody = ({ searchParams }: Props) => {
     router.push(`?date=${prevDate}`);
   };
 
+  const handleMoveDate = (date: string) => {
+    router.push(`?date=${date}`);
+  };
+
   return (
     <div>
       <div className={styles.datePaginationWrap}>
@@ -47,7 +51,9 @@ const TaskBody = ({ searchParams }: Props) => {
                   searchParams.date === date ? styles.currentDate : ""
                 } ${isSunday ? styles.holiday : ""}`}
               >
-                <button>{date.slice(-2)}</button>
+                <button onClick={() => handleMoveDate(date)}>
+                  {date.slice(-2)}
+                </button>
                 {date === todayDate ? (
                   <div className={styles.today}>오늘</div>
                 ) : null}
@@ -59,6 +65,15 @@ const TaskBody = ({ searchParams }: Props) => {
         <button className={styles.nextButton} onClick={handleNextDate}>
           <FaArrowAltCircleRight />
         </button>
+      </div>
+      <div className={styles.taskListWrap}>
+        <div className={styles.col}>0</div>
+        <div className={styles.col}>1</div>
+        <div className={styles.col}>2</div>
+        <div className={styles.col}>3</div>
+        <div className={styles.col}>4</div>
+        <div className={styles.col}>5</div>
+        <div className={styles.col}>6</div>
       </div>
     </div>
   );
