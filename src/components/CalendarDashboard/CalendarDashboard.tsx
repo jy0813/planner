@@ -20,6 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCalendarData } from "@/service/getCalendarData";
 import { CalendarData } from "@/types/calendar";
 import useDialog from "@/hooks/useDialog";
+import useDebounce from "@/hooks/useDebounce";
 
 type CalendarContextType = ReturnType<typeof useCalendar>;
 const CalendarContext = createContext<CalendarContextType | undefined>(
@@ -59,6 +60,7 @@ const CalendarHeader = () => {
   const nextMonthMove = () => {
     setCurrentDate(addMonths(currentDate, 1));
   };
+
   return (
     <div className={styles.header}>
       <div className={styles.todayArea}>
@@ -102,7 +104,8 @@ const CalenderDays = () => {
 };
 
 const CalendarBody = () => {
-  const { weekCalendarList, currentDate } = useCalendarContext();
+  const { weekCalendarList, currentDate, setCurrentDate } =
+    useCalendarContext();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [showMemoBox, setShowMemoBox] = useState(true);
   const { data: calendarData } = useQuery<CalendarData[]>({
@@ -114,6 +117,22 @@ const CalendarBody = () => {
 
   const router = useRouter();
   const { showToast } = useToast();
+
+  const prevMonthMove = () => {
+    setCurrentDate(subMonths(currentDate, 1));
+  };
+
+  const nextMonthMove = () => {
+    setCurrentDate(addMonths(currentDate, 1));
+  };
+
+  const handleWheel = useDebounce((e) => {
+    if (e.deltaY < 0) {
+      nextMonthMove();
+    } else {
+      prevMonthMove();
+    }
+  }, 200);
 
   const handleCtrlClick = (e: MouseEvent<HTMLDivElement>, date: Date) => {
     setShowMemoBox(false);
@@ -195,7 +214,7 @@ const CalendarBody = () => {
   }, [handleCtrlRelease]);
 
   return (
-    <div className={styles.body}>
+    <div className={styles.body} onWheel={handleWheel}>
       {weekCalendarList.map((week, i) => (
         <div key={i} className={`${styles.row}`}>
           {week.map((day, j) => {
