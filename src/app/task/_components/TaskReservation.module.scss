@@ -1,0 +1,28 @@
+.reservationWrap {
+  margin-top: 10rem;
+  border: 0.1rem solid #ccc;
+
+  .reservationHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: #ddd;
+
+    h3 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+  }
+
+  .reservationBody {
+    .reservationTimeArea {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      min-height: 15rem;
+      padding: 0.5rem;
+      box-sizing: content-box;
+    }
+  }
+}
