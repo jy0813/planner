@@ -1,6 +1,6 @@
 "use client";
 
-import { addDays, format, parse, subDays } from "date-fns";
+import { addDays, format, getDay, parse, subDays } from "date-fns";
 import { useRouter } from "next/navigation";
 import styles from "./TaskBody.module.scss";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
@@ -36,19 +36,25 @@ const TaskBody = ({ searchParams }: Props) => {
           <FaArrowAltCircleLeft />
         </button>
         <div className={styles.datePaginationButtons}>
-          {dates.map((date, index) => (
-            <div
-              key={index}
-              className={`${styles.dateArea} ${
-                searchParams.date === date ? styles.currentDate : ""
-              }`}
-            >
-              <button>{date.slice(-2)}</button>
-              {date === todayDate ? (
-                <div className={styles.today}>오늘</div>
-              ) : null}
-            </div>
-          ))}
+          {dates.map((date, index) => {
+            const parsedDate = parse(date, dateFormat, new Date());
+            const isSunday = getDay(parsedDate) === 0;
+
+            return (
+              <div
+                key={index}
+                className={`${styles.dateArea} ${
+                  searchParams.date === date ? styles.currentDate : ""
+                } ${isSunday ? styles.holiday : ""}`}
+              >
+                <button>{date.slice(-2)}</button>
+                {date === todayDate ? (
+                  <div className={styles.today}>오늘</div>
+                ) : null}
+                {isSunday ? <div className={styles.holiday}>휴무일</div> : null}
+              </div>
+            );
+          })}
         </div>
         <button className={styles.nextButton} onClick={handleNextDate}>
           <FaArrowAltCircleRight />
