@@ -1,0 +1,49 @@
+.datePaginationWrap {
+  display: flex;
+  justify-content: center;
+
+  .prevButton,
+  .nextButton {
+    font-size: 3rem;
+  }
+
+  .datePaginationButtons {
+    display: flex;
+    justify-content: center;
+    column-gap: 3rem;
+    margin: 0 3rem;
+
+    .dateArea {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 5rem;
+      height: 5rem;
+      border-radius: 50%;
+
+      &.currentDate {
+        background-color: #adccf3;
+        color: #fff;
+        border-radius: 50%;
+      }
+
+      button {
+        font-size: 3rem;
+      }
+
+      .today {
+        position: absolute;
+        bottom: -3rem;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 1.4rem;
+        background-color: #1479eb;
+        border-radius: 0.6rem;
+        color: #fff;
+      }
+    }
+  }
+}

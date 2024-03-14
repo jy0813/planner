@@ -4,7 +4,6 @@ import { format, parse } from "date-fns";
 import styles from "./TaskHeader.module.scss";
 import Link from "next/link";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Props = {
@@ -14,15 +13,12 @@ type Props = {
 const TaskHeader = ({ searchParams }: Props) => {
   const router = useRouter();
   const initialDate = searchParams.date || format(new Date(), "yyyyMMdd");
-  const [currentDate, setCurrentDate] = useState(
-    parse(initialDate, "yyyyMMdd", new Date())
-  );
+  const currentDate = parse(initialDate, "yyyyMMdd", new Date());
   const formattedDate = format(currentDate, "yyyy년 MM월 dd일");
+
   const handleTodayMove = () => {
     const newDate = new Date();
-    setCurrentDate(newDate);
     const formattedNewDate = format(newDate, "yyyyMMdd");
-    console.log(formattedNewDate);
     router.replace(`?date=${formattedNewDate}`);
   };
   return (
