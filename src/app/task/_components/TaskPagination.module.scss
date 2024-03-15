@@ -1,7 +1,7 @@
 .datePaginationWrap {
   display: flex;
   justify-content: center;
-  margin-top: 3rem;
+  margin-top: 5rem;
 
   .prevButton,
   .nextButton {
@@ -23,6 +23,14 @@
       width: 5rem;
       height: 5rem;
       border-radius: 50%;
+
+      .dayOfWeek {
+        position: absolute;
+        top: -3rem;
+        font-size: 1.4rem;
+        font-weight: 500;
+        color: #000;
+      }
 
       &.currentDate {
         background-color: #adccf3;

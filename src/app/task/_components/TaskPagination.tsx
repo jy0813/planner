@@ -1,6 +1,7 @@
 "use client";
 
 import { addDays, format, getDay, parse, subDays } from "date-fns";
+import { ko } from "date-fns/locale";
 import { useRouter } from "next/navigation";
 import styles from "./TaskPagination.module.scss";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
@@ -41,6 +42,7 @@ const TaskPagination = ({ searchParams }: Props) => {
         {dates.map((date, index) => {
           const parsedDate = parse(date, dateFormat, new Date());
           const isSunday = getDay(parsedDate) === 0;
+          const dayOfWeek = format(parsedDate, "eee", { locale: ko });
 
           return (
             <div
@@ -49,6 +51,7 @@ const TaskPagination = ({ searchParams }: Props) => {
                 searchParams.date === date ? styles.currentDate : ""
               } ${isSunday ? styles.holiday : ""}`}
             >
+              <p className={styles.dayOfWeek}>{dayOfWeek}</p>
               <button onClick={() => handleMoveDate(date)}>
                 {date.slice(-2)}
               </button>
