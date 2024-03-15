@@ -1,28 +1,80 @@
 .reservationWrap {
   margin-top: 10rem;
-  border: 0.1rem solid #ccc;
 
-  .reservationHeader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    background-color: #ddd;
+  .reservationTaskHeaderContent {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(auto-fit, minmax(0, auto));
+    margin-left: 7rem;
+    background-color: #efefef;
 
-    h3 {
-      font-size: 2rem;
-      font-weight: 700;
+    .taskHeader {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      &::after {
+        z-index: 10;
+        position: absolute;
+        content: "";
+        width: 0.1rem;
+        height: 100%;
+        right: 0;
+        background-color: #ccc;
+      }
+
+      &:hover {
+        cursor: move;
+      }
+
+      &:last-of-type {
+        border-right: none;
+      }
+
+      span {
+        font-size: 2rem;
+        font-weight: 700;
+        padding: 1rem;
+      }
+
+      .resizeDragArea {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 2rem;
+        height: 100%;
+        cursor: col-resize;
+      }
+
+      .subTaskHeaderArea {
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-columns: repeat(auto-fit, minmax(0, auto));
+        width: 100%;
+
+        .subTaskHeader {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-top: 0.1rem solid #ccc;
+          border-right: 0.1rem solid #ccc;
+
+          &:last-of-type {
+            border-right: none;
+          }
+        }
+      }
     }
   }
 
-  .reservationBody {
+  .reservationTaskBodyContent {
     .reservationTimeArea {
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: 1fr;
-      min-height: 15rem;
-      padding: 0.5rem;
-      box-sizing: content-box;
+      display: flex;
+      flex-direction: column;
+      height: fit-content;
+      font-size: 1.4rem;
     }
   }
 }
