@@ -22,6 +22,7 @@ const TaskReservation = () => {
       const left = (e as MouseEvent).clientX;
       const width = Math.max(MIN_WIDTH, left - initialLeft);
       target.style.width = `${width / 10}rem`;
+      target.style.flex = "0 1 auto";
 
       console.log(initialLeft, left, width);
     };

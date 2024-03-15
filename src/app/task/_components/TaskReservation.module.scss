@@ -1,14 +1,19 @@
 .reservationWrap {
   margin-top: 10rem;
+  width: 100%;
 
   .reservationTaskHeaderContent {
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: repeat(auto-fit, minmax(0, auto));
+    // display: grid;
+    // grid-auto-flow: column;
+    // grid-template-columns: repeat(auto-fit, minmax(0, auto));
+    display: flex;
+    min-width: max-content;
     margin-left: 7rem;
     background-color: #efefef;
 
     .taskHeader {
+      flex: 1 0 auto;
+      min-width: 100px;
       position: relative;
       display: flex;
       flex-direction: column;
