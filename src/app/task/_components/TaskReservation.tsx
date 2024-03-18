@@ -4,6 +4,11 @@ import { MouseEventHandler, useMemo } from "react";
 
 import styles from "./TaskReservation.module.scss";
 import getHours from "@/utils/getHours";
+import { ReservationData } from "@/types/reservation";
+import { getReservationData } from "@/service/getReservationData";
+import { useQuery } from "@tanstack/react-query";
+import { getClinicInfoData } from "@/service/getClinicInfoData";
+import { ClinicInfoData } from "@/types/clinic";
 
 const MIN_WIDTH = 100;
 
@@ -11,6 +16,22 @@ const TaskReservation = () => {
   const hours = useMemo(() => {
     return getHours();
   }, []);
+
+  const { data: reservationData } = useQuery<ReservationData[]>({
+    queryKey: ["reservation"],
+    queryFn: getReservationData,
+    staleTime: 60 * 1000,
+    gcTime: 300 * 1000,
+  });
+
+  const { data: clinicInfoData } = useQuery<ClinicInfoData>({
+    queryKey: ["clinicInfo"],
+    queryFn: getClinicInfoData,
+    staleTime: 60 * 1000,
+    gcTime: 300 * 1000,
+  });
+
+  console.log(reservationData, clinicInfoData);
 
   const dragHandler: MouseEventHandler<HTMLDivElement> = (e) => {
     const target = e.currentTarget.parentElement;
@@ -49,15 +70,24 @@ const TaskReservation = () => {
           </div>
           <div className={styles.taskHeader}>
             <span>접수</span>
-            <div className={styles.resizeDragArea}></div>
+            <div
+              onMouseDown={dragHandler}
+              className={styles.resizeDragArea}
+            ></div>
           </div>
           <div className={styles.taskHeader}>
             <span>검사</span>
-            <div className={styles.resizeDragArea}></div>
+            <div
+              onMouseDown={dragHandler}
+              className={styles.resizeDragArea}
+            ></div>
           </div>
           <div className={styles.taskHeader}>
             <span>진료</span>
-            <div className={styles.resizeDragArea}></div>
+            <div
+              onMouseDown={dragHandler}
+              className={styles.resizeDragArea}
+            ></div>
             <div className={styles.subTaskHeaderArea}>
               <div className={styles.subTaskHeader}>
                 <span>의사1</span>
@@ -69,7 +99,6 @@ const TaskReservation = () => {
           </div>
           <div className={styles.taskHeader}>
             <span>치료</span>
-            <div className={styles.resizeDragArea}></div>
             <div className={styles.subTaskHeaderArea}>
               <div className={styles.subTaskHeader}>
                 <span>원적외선</span>

@@ -158,8 +158,78 @@ const CalendarData = [
   },
 ];
 
+const reservationData = [
+  {
+    id: 0,
+    reservations: [
+      {
+        id: 0,
+        time: "09:00",
+        name: "홍길동",
+        status: "RESERVATION",
+        adminMemo: "예약 메모",
+      },
+      {
+        id: 1,
+        time: "09:30",
+        name: "김철수",
+        status: "RESERVATION",
+        adminMemo: "메가 인플루언서 잘 해줘야함",
+      },
+      {
+        id: 2,
+        time: "09:30",
+        name: "이철수",
+        status: "RESERVATION",
+        adminMemo: "메가 인플루언서 잘 해줘야함",
+      },
+    ],
+    register: [
+      {
+        id: 0,
+        time: "09:30",
+        name: "홍길동",
+        status: "REGISTER",
+        adminMemo: "예약 메모",
+      },
+      {
+        id: 1,
+        time: "10:00",
+        name: "이철수",
+        status: "REGISTER",
+        adminMemo: "메가 인플루언서 잘 해줘야함",
+      },
+      {
+        id: 2,
+        time: "10:00",
+        name: "김철수",
+        status: "REGISTER",
+        adminMemo: "메가 인플루언서 잘 해줘야함",
+      },
+    ],
+  },
+];
+
+const clinicInfoData = {
+  id: 0,
+  name: "테스트병원",
+  address: "서울시 강남구 테스트로 123",
+  phone: "02-1234-5678",
+  fax: "02-1234-5679",
+  email: "test@test",
+  businessStartTime: "09:00",
+  businessEndTime: "21:00",
+  adminMemo: "관리자 메모",
+};
+
 export const handlers = [
   http.get("/api/calendar", ({}) => {
     return HttpResponse.json(CalendarData);
+  }),
+  http.get("/api/reservation", ({}) => {
+    return HttpResponse.json(reservationData);
+  }),
+  http.get("/api/clinicInfo", ({}) => {
+    return HttpResponse.json(clinicInfoData);
   }),
 ];
