@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEventHandler, useMemo } from "react";
+import { MouseEventHandler, useEffect, useMemo, useRef } from "react";
 
 import styles from "./TaskReservation.module.scss";
 import getHours from "@/utils/getHours";
@@ -13,6 +13,8 @@ import { ClinicInfoData } from "@/types/clinic";
 const MIN_WIDTH = 100;
 
 const TaskReservation = () => {
+  const parentRef = useRef<HTMLDivElement>(null);
+
   const { data: reservationData } = useQuery<ReservationData[]>({
     queryKey: ["reservation"],
     queryFn: getReservationData,
@@ -27,7 +29,7 @@ const TaskReservation = () => {
     gcTime: 300 * 1000,
   });
 
-  console.log(reservationData, clinicInfoData);
+  console.log(reservationData);
 
   const hours = useMemo(() => {
     if (clinicInfoData?.businessStartTime || clinicInfoData?.businessEndTime) {
@@ -39,8 +41,22 @@ const TaskReservation = () => {
     return getHours();
   }, [clinicInfoData?.businessEndTime, clinicInfoData?.businessStartTime]);
 
+  useEffect(() => {
+    if (parentRef.current) {
+      const children = Array.from(parentRef.current.children) as HTMLElement[];
+      for (let i = 0; i < children.length; i++) {
+        if (i < children.length) {
+          console.log(children[i].clientWidth);
+          children[i].style.width = `${children[i].clientWidth / 10}rem`;
+          children[i].style.flex = "0 1 auto";
+        }
+      }
+    }
+  }, []);
+
   const dragHandler: MouseEventHandler<HTMLDivElement> = (e) => {
     const target = e.currentTarget.parentElement;
+
     if (!target) return;
 
     const initialLeft = target.getBoundingClientRect().left;
@@ -62,11 +78,10 @@ const TaskReservation = () => {
     );
   };
 
-  console.log(hours);
   return (
     <div className={styles.reservationWrap}>
       <div className={styles.reservationTaskArea}>
-        <div className={styles.reservationTaskHeaderContent}>
+        <div ref={parentRef} className={styles.reservationTaskHeaderContent}>
           <div className={styles.taskHeader}>
             <span>예약</span>
             <div
@@ -105,6 +120,10 @@ const TaskReservation = () => {
           </div>
           <div className={styles.taskHeader}>
             <span>치료</span>
+            <div
+              onMouseDown={dragHandler}
+              className={styles.resizeDragArea}
+            ></div>
             <div className={styles.subTaskHeaderArea}>
               <div className={styles.subTaskHeader}>
                 <span>원적외선</span>

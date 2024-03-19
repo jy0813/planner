@@ -9,7 +9,6 @@
     display: flex;
     min-width: max-content;
     margin-left: 7rem;
-    background-color: #efefef;
 
     .taskHeader {
       flex: 1 0 auto;
@@ -19,6 +18,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      background-color: #efefef;
 
       &::after {
         position: absolute;
@@ -64,9 +64,16 @@
           align-items: center;
           border-top: 0.1rem solid #ccc;
           border-right: 0.1rem solid #ccc;
-
+          text-align: center;
           &:last-of-type {
             border-right: none;
+          }
+
+          span {
+            overflow: hidden;
+            width: 100%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
         }
       }
@@ -79,6 +86,10 @@
       flex-direction: column;
       height: fit-content;
       font-size: 1.4rem;
+
+      .reservationTime {
+        min-height: 2rem;
+      }
     }
   }
 }
