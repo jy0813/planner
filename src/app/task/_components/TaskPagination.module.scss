@@ -1,7 +1,13 @@
 .datePaginationWrap {
   display: flex;
-  justify-content: center;
+  min-width: max-content;
   margin-top: 5rem;
+
+  .datePaginationArea {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
 
   .prevButton,
   .nextButton {

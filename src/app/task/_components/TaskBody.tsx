@@ -7,10 +7,10 @@ type Props = {
 
 const TaskBody = ({ searchParams }: Props) => {
   return (
-    <div>
+    <>
       <TaskPagination searchParams={searchParams} />
       <TaskReservation />
-    </div>
+    </>
   );
 };
 

@@ -49,39 +49,41 @@ const TaskPagination = ({ searchParams }: Props) => {
   };
   return (
     <div className={styles.datePaginationWrap}>
-      <button className={styles.prevButton} onClick={handlePrevDate}>
-        <FaArrowAltCircleLeft />
-      </button>
-      <div className={styles.datePaginationButtons}>
-        {dates.map((date, index) => {
-          const parsedDate = parse(date, dateFormat, new Date());
-          const isSunday = getDay(parsedDate) === 0;
-          const dayOfWeek = format(parsedDate, "eee", { locale: ko });
-          const isHoliday = clinicHoliday?.includes(date);
-          return (
-            <div
-              key={index}
-              className={`${styles.dateArea} ${
-                searchParams.date === date ? styles.currentDate : ""
-              } ${isSunday || isHoliday ? styles.holiday : ""}`}
-            >
-              <p className={styles.dayOfWeek}>{dayOfWeek}</p>
-              <button onClick={() => handleMoveDate(date)}>
-                {date.slice(-2)}
-              </button>
-              {date === todayDate ? (
-                <div className={styles.today}>오늘</div>
-              ) : null}
-              {isSunday || isHoliday ? (
-                <div className={styles.holiday}>휴무일</div>
-              ) : null}
-            </div>
-          );
-        })}
+      <div className={styles.datePaginationArea}>
+        <button className={styles.prevButton} onClick={handlePrevDate}>
+          <FaArrowAltCircleLeft />
+        </button>
+        <div className={styles.datePaginationButtons}>
+          {dates.map((date, index) => {
+            const parsedDate = parse(date, dateFormat, new Date());
+            const isSunday = getDay(parsedDate) === 0;
+            const dayOfWeek = format(parsedDate, "eee", { locale: ko });
+            const isHoliday = clinicHoliday?.includes(date);
+            return (
+              <div
+                key={index}
+                className={`${styles.dateArea} ${
+                  searchParams.date === date ? styles.currentDate : ""
+                } ${isSunday || isHoliday ? styles.holiday : ""}`}
+              >
+                <p className={styles.dayOfWeek}>{dayOfWeek}</p>
+                <button onClick={() => handleMoveDate(date)}>
+                  {date.slice(-2)}
+                </button>
+                {date === todayDate ? (
+                  <div className={styles.today}>오늘</div>
+                ) : null}
+                {isSunday || isHoliday ? (
+                  <div className={styles.holiday}>휴무일</div>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+        <button className={styles.nextButton} onClick={handleNextDate}>
+          <FaArrowAltCircleRight />
+        </button>
       </div>
-      <button className={styles.nextButton} onClick={handleNextDate}>
-        <FaArrowAltCircleRight />
-      </button>
     </div>
   );
 };
