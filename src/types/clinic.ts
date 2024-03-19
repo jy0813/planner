@@ -8,4 +8,11 @@ export interface ClinicInfoData {
   businessStartTime: string;
   businessEndTime: string;
   adminMemo: string;
+  clinicSchedule: ClinicSchedule[];
+}
+
+interface ClinicSchedule {
+  workDate: string;
+  isClosed: boolean;
+  memo: string;
 }

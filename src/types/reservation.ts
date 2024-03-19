@@ -1,7 +1,13 @@
+import { time } from "console";
+import { id } from "date-fns/locale";
+
 export interface ReservationData {
   id: number;
   reservations: Reservation[];
-  register: Reservation[];
+  registers: Reservation[];
+  inspections: Reservation[];
+  clinics: Clinics[];
+  treatments: Treatments[];
 }
 
 interface Reservation {
@@ -10,4 +16,16 @@ interface Reservation {
   name: string;
   status: string;
   adminMemo: string;
+}
+
+interface Clinics {
+  id: number;
+  name: string;
+  clinics: Reservation[];
+}
+
+interface Treatments {
+  id: number;
+  name: string;
+  treatments: Reservation[];
 }

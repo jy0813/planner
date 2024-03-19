@@ -184,7 +184,7 @@ const reservationData = [
         adminMemo: "메가 인플루언서 잘 해줘야함",
       },
     ],
-    register: [
+    registers: [
       {
         id: 0,
         time: "09:30",
@@ -207,6 +207,120 @@ const reservationData = [
         adminMemo: "메가 인플루언서 잘 해줘야함",
       },
     ],
+    inspections: [
+      {
+        id: 0,
+        time: "10:00",
+        name: "홍길동",
+        status: "INSPECTION",
+        adminMemo: "예약 메모",
+      },
+      {
+        id: 1,
+        time: "10:30",
+        name: "김철수",
+        status: "INSPECTION",
+        adminMemo: "메가 인플루언서 잘 해줘야함",
+      },
+      {
+        id: 2,
+        time: "10:30",
+        name: "이철수",
+        status: "INSPECTION",
+        adminMemo: "메가 인플루언서 잘 해줘야함",
+      },
+    ],
+    clinics: [
+      {
+        id: 0,
+        name: "의사1",
+        clinics: [
+          {
+            id: 0,
+            time: "10:30",
+            name: "홍길동",
+            status: "CLIINIC",
+            adminMemo: "예약 메모",
+          },
+          {
+            id: 1,
+            time: "11:00",
+            name: "김철수",
+            status: "CLIINIC",
+            adminMemo: "메가 인플루언서 잘 해줘야함",
+          },
+        ],
+      },
+      {
+        id: 1,
+        name: "의사2",
+        clinics: [
+          {
+            id: 2,
+            time: "11:30",
+            name: "이철수",
+            status: "CLIINIC",
+            adminMemo: "메가 인플루언서 잘 해줘야함",
+          },
+        ],
+      },
+    ],
+    treatments: [
+      {
+        id: 0,
+        name: "원적외선",
+        tretments: [
+          {
+            id: 0,
+            time: "11:00",
+            name: "홍길동",
+            status: "TREATMENT",
+            adminMemo: "예약 메모",
+          },
+        ],
+      },
+      {
+        id: 1,
+        name: "온열",
+        treatments: [
+          {
+            id: 1,
+            time: "11:30",
+            name: "김철수",
+            status: "TREATMENT",
+            adminMemo: "메가 인플루언서 잘 해줘야함",
+          },
+        ],
+      },
+      {
+        id: 2,
+        name: "VIP 1",
+        treatments: [
+          {
+            id: 2,
+            time: "12:00",
+            name: "이철수",
+            status: "TREATMENT",
+            adminMemo: "메가 인플루언서 잘 해줘야함",
+          },
+        ],
+      },
+      {
+        id: 3,
+        name: "VIP 2",
+        treatments: [],
+      },
+      {
+        id: 4,
+        name: "VIP 3",
+        treatments: [],
+      },
+      {
+        id: 5,
+        name: "VIP 4",
+        treatments: [],
+      },
+    ],
   },
 ];
 
@@ -220,6 +334,18 @@ const clinicInfoData = {
   businessStartTime: "09:00",
   businessEndTime: "21:00",
   adminMemo: "관리자 메모",
+  clinicSchedule: [
+    {
+      workDate: "2024-03-01",
+      isClosed: true,
+      memo: "삼일절 공휴일 휴무",
+    },
+    {
+      workDate: "2024-03-20",
+      isClosed: true,
+      memo: "그냥 휴무",
+    },
+  ],
 };
 
 export const handlers = [

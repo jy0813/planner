@@ -13,10 +13,6 @@ import { ClinicInfoData } from "@/types/clinic";
 const MIN_WIDTH = 100;
 
 const TaskReservation = () => {
-  const hours = useMemo(() => {
-    return getHours();
-  }, []);
-
   const { data: reservationData } = useQuery<ReservationData[]>({
     queryKey: ["reservation"],
     queryFn: getReservationData,
@@ -32,6 +28,16 @@ const TaskReservation = () => {
   });
 
   console.log(reservationData, clinicInfoData);
+
+  const hours = useMemo(() => {
+    if (clinicInfoData?.businessStartTime || clinicInfoData?.businessEndTime) {
+      const startTime = parseInt(clinicInfoData?.businessStartTime);
+      const endTime = parseInt(clinicInfoData?.businessEndTime);
+
+      return getHours(startTime, endTime);
+    }
+    return getHours();
+  }, [clinicInfoData?.businessEndTime, clinicInfoData?.businessStartTime]);
 
   const dragHandler: MouseEventHandler<HTMLDivElement> = (e) => {
     const target = e.currentTarget.parentElement;
