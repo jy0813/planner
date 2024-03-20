@@ -14,7 +14,7 @@ const MIN_WIDTH = 100;
 const TaskReservation = () => {
   const parentRef = useRef<HTMLDivElement>(null);
 
-  const [TaskData, businessTimeData] = useQueries({
+  const [{ data: taskData }, { data: businessTimeData }] = useQueries({
     queries: [
       {
         queryKey: ["task"],
@@ -31,23 +31,18 @@ const TaskReservation = () => {
     ],
   });
 
-  console.log(TaskData);
-
   const hours = useMemo(() => {
     if (
-      businessTimeData.data?.businessStartTime ||
-      businessTimeData.data?.businessEndTime
+      businessTimeData?.businessStartTime ||
+      businessTimeData?.businessEndTime
     ) {
-      const startTime = parseInt(businessTimeData.data?.businessStartTime);
-      const endTime = parseInt(businessTimeData.data?.businessEndTime);
+      const startTime = parseInt(businessTimeData?.businessStartTime);
+      const endTime = parseInt(businessTimeData?.businessEndTime);
 
       return getHours(startTime, endTime);
     }
     return getHours();
-  }, [
-    businessTimeData.data?.businessEndTime,
-    businessTimeData.data?.businessStartTime,
-  ]);
+  }, [businessTimeData?.businessEndTime, businessTimeData?.businessStartTime]);
 
   useEffect(() => {
     if (parentRef.current) {
@@ -60,7 +55,7 @@ const TaskReservation = () => {
         }
       }
     }
-  }, []);
+  }, [taskData]);
 
   const dragHandler: MouseEventHandler<HTMLDivElement> = (e) => {
     const target = e.currentTarget.parentElement;
@@ -90,69 +85,26 @@ const TaskReservation = () => {
     <div className={styles.reservationWrap}>
       <div className={styles.reservationTaskArea}>
         <div ref={parentRef} className={styles.reservationTaskHeaderContent}>
-          <div className={styles.taskHeader}>
-            <span>예약</span>
-            <div
-              onMouseDown={dragHandler}
-              className={styles.resizeDragArea}
-            ></div>
-          </div>
-          <div className={styles.taskHeader}>
-            <span>접수</span>
-            <div
-              onMouseDown={dragHandler}
-              className={styles.resizeDragArea}
-            ></div>
-          </div>
-          <div className={styles.taskHeader}>
-            <span>검사</span>
-            <div
-              onMouseDown={dragHandler}
-              className={styles.resizeDragArea}
-            ></div>
-          </div>
-          <div className={styles.taskHeader}>
-            <span>진료</span>
-            <div
-              onMouseDown={dragHandler}
-              className={styles.resizeDragArea}
-            ></div>
-            <div className={styles.subTaskHeaderArea}>
-              <div className={styles.subTaskHeader}>
-                <span>의사1</span>
+          {taskData?.map((task: TaskData) => {
+            return (
+              <div key={task.id} className={styles.taskHeader}>
+                <span>{task.name}</span>
+                <div
+                  onMouseDown={dragHandler}
+                  className={styles.resizeDragArea}
+                ></div>
+                <div className={styles.subTaskHeaderArea}>
+                  {task.subTask.map((subTask) => {
+                    return (
+                      <div key={subTask.id} className={styles.subTaskHeader}>
+                        <span>{subTask.name}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-              <div className={styles.subTaskHeader}>
-                <span>의사2</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.taskHeader}>
-            <span>치료</span>
-            <div
-              onMouseDown={dragHandler}
-              className={styles.resizeDragArea}
-            ></div>
-            <div className={styles.subTaskHeaderArea}>
-              <div className={styles.subTaskHeader}>
-                <span>원적외선</span>
-              </div>
-              <div className={styles.subTaskHeader}>
-                <span>온열</span>
-              </div>
-              <div className={styles.subTaskHeader}>
-                <span>VIP 1</span>
-              </div>
-              <div className={styles.subTaskHeader}>
-                <span>VIP 2</span>
-              </div>
-              <div className={styles.subTaskHeader}>
-                <span>VIP 3</span>
-              </div>
-              <div className={styles.subTaskHeader}>
-                <span>VIP 4</span>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
         <div className={styles.reservationTaskBodyContent}>
           <div className={styles.reservationTimeArea}>
