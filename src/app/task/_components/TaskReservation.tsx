@@ -4,42 +4,50 @@ import { MouseEventHandler, useEffect, useMemo, useRef } from "react";
 
 import styles from "./TaskReservation.module.scss";
 import getHours from "@/utils/getHours";
-import { ReservationData } from "@/types/reservation";
-import { getReservationData } from "@/service/getReservationData";
-import { useQuery } from "@tanstack/react-query";
-import { getClinicInfoData } from "@/service/getClinicInfoData";
-import { ClinicInfoData } from "@/types/clinic";
+import { useQueries, useQuery } from "@tanstack/react-query";
+import { getTaskData } from "@/service/getTaskData";
+import { TaskData } from "@/types/task";
+import { getClinicBusinessTimeDate } from "@/service/getClinicBusinessTimeData";
 
 const MIN_WIDTH = 100;
 
 const TaskReservation = () => {
   const parentRef = useRef<HTMLDivElement>(null);
 
-  const { data: reservationData } = useQuery<ReservationData[]>({
-    queryKey: ["reservation"],
-    queryFn: getReservationData,
-    staleTime: 60 * 1000,
-    gcTime: 300 * 1000,
+  const [TaskData, businessTimeData] = useQueries({
+    queries: [
+      {
+        queryKey: ["task"],
+        queryFn: getTaskData,
+        staleTime: 60 * 1000,
+        gcTime: 300 * 1000,
+      },
+      {
+        queryKey: ["business"],
+        queryFn: getClinicBusinessTimeDate,
+        staleTime: 60 * 1000,
+        gcTime: 300 * 1000,
+      },
+    ],
   });
 
-  const { data: clinicInfoData } = useQuery<ClinicInfoData>({
-    queryKey: ["clinicInfo"],
-    queryFn: getClinicInfoData,
-    staleTime: 60 * 1000,
-    gcTime: 300 * 1000,
-  });
-
-  console.log(reservationData);
+  console.log(TaskData);
 
   const hours = useMemo(() => {
-    if (clinicInfoData?.businessStartTime || clinicInfoData?.businessEndTime) {
-      const startTime = parseInt(clinicInfoData?.businessStartTime);
-      const endTime = parseInt(clinicInfoData?.businessEndTime);
+    if (
+      businessTimeData.data?.businessStartTime ||
+      businessTimeData.data?.businessEndTime
+    ) {
+      const startTime = parseInt(businessTimeData.data?.businessStartTime);
+      const endTime = parseInt(businessTimeData.data?.businessEndTime);
 
       return getHours(startTime, endTime);
     }
     return getHours();
-  }, [clinicInfoData?.businessEndTime, clinicInfoData?.businessStartTime]);
+  }, [
+    businessTimeData.data?.businessEndTime,
+    businessTimeData.data?.businessStartTime,
+  ]);
 
   useEffect(() => {
     if (parentRef.current) {

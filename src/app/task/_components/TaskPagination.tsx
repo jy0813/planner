@@ -5,9 +5,9 @@ import { ko } from "date-fns/locale";
 import { useRouter } from "next/navigation";
 import styles from "./TaskPagination.module.scss";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
-import { getClinicInfoData } from "@/service/getClinicInfoData";
 import { useQuery } from "@tanstack/react-query";
-import { ClinicInfoData } from "@/types/clinic";
+import { ScheduleData } from "@/types/schedule";
+import { getClinicScheduleDate } from "@/service/getClinicScheduleData";
 type Props = {
   searchParams: { date: string };
 };
@@ -18,15 +18,15 @@ const TaskPagination = ({ searchParams }: Props) => {
   const todayDate = format(new Date(), dateFormat);
   const currentDate = parse(searchParams.date, dateFormat, new Date());
 
-  const { data: clinicInfoData } = useQuery<ClinicInfoData>({
-    queryKey: ["clinicInfo"],
-    queryFn: getClinicInfoData,
+  const { data: clinicScheduleData } = useQuery<ScheduleData[]>({
+    queryKey: ["schedule"],
+    queryFn: getClinicScheduleDate,
     staleTime: 60 * 1000,
     gcTime: 300 * 1000,
   });
 
-  const clinicHoliday = clinicInfoData?.clinicSchedule
-    .filter((schedule) => schedule.isClosed)
+  const clinicHoliday = clinicScheduleData
+    ?.filter((schedule) => schedule.isClosed)
     .map((item) => format(item.workDate, dateFormat));
 
   const dates = Array.from({ length: 15 }, (_, i) =>

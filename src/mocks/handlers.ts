@@ -386,30 +386,6 @@ const taskData = [
   },
 ];
 
-const clinicInfoData = {
-  id: 0,
-  name: "테스트병원",
-  address: "서울시 강남구 테스트로 123",
-  phone: "02-1234-5678",
-  fax: "02-1234-5679",
-  email: "test@test",
-  businessStartTime: "09:00",
-  businessEndTime: "21:00",
-  adminMemo: "관리자 메모",
-  clinicSchedule: [
-    {
-      workDate: "2024-03-01",
-      isClosed: true,
-      memo: "삼일절 공휴일 휴무",
-    },
-    {
-      workDate: "2024-03-20",
-      isClosed: true,
-      memo: "그냥 휴무",
-    },
-  ],
-};
-
 const clinicBusinessTimeData = {
   businessStartTime: "09:00",
   businessEndTime: "21:00",
@@ -434,9 +410,6 @@ export const handlers = [
   }),
   http.get("/api/reservation", ({}) => {
     return HttpResponse.json(reservationData);
-  }),
-  http.get("/api/clinicInfo", ({}) => {
-    return HttpResponse.json(clinicInfoData);
   }),
   http.get("/api/task", ({}) => {
     return HttpResponse.json(taskData);
