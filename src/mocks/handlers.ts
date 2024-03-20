@@ -324,6 +324,68 @@ const reservationData = [
   },
 ];
 
+const taskData = [
+  {
+    id: 0,
+    name: "예약",
+    subTask: [],
+  },
+  {
+    id: 1,
+    name: "접수",
+    subTask: [],
+  },
+  {
+    id: 2,
+    name: "검사",
+    subTask: [],
+  },
+  {
+    id: 3,
+    name: "진료",
+    subTask: [
+      {
+        id: 0,
+        name: "의사1",
+      },
+      {
+        id: 1,
+        name: "의사1",
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: "치료",
+    subTask: [
+      {
+        id: 0,
+        name: "원적외선",
+      },
+      {
+        id: 1,
+        name: "온열",
+      },
+      {
+        id: 2,
+        name: "VIP 1",
+      },
+      {
+        id: 3,
+        name: "VIP 2",
+      },
+      {
+        id: 4,
+        name: "VIP 3",
+      },
+      {
+        id: 5,
+        name: "VIP 4",
+      },
+    ],
+  },
+];
+
 const clinicInfoData = {
   id: 0,
   name: "테스트병원",
@@ -348,6 +410,24 @@ const clinicInfoData = {
   ],
 };
 
+const clinicBusinessTimeData = {
+  businessStartTime: "09:00",
+  businessEndTime: "21:00",
+};
+
+const clinicScheduleData = [
+  {
+    workDate: "2024-03-01",
+    isClosed: true,
+    memo: "삼일절 공휴일 휴무",
+  },
+  {
+    workDate: "2024-03-20",
+    isClosed: true,
+    memo: "그냥 휴무",
+  },
+];
+
 export const handlers = [
   http.get("/api/calendar", ({}) => {
     return HttpResponse.json(CalendarData);
@@ -357,5 +437,14 @@ export const handlers = [
   }),
   http.get("/api/clinicInfo", ({}) => {
     return HttpResponse.json(clinicInfoData);
+  }),
+  http.get("/api/task", ({}) => {
+    return HttpResponse.json(taskData);
+  }),
+  http.get("/api/schedule", ({}) => {
+    return HttpResponse.json(clinicScheduleData);
+  }),
+  http.get("/api/business", ({}) => {
+    return HttpResponse.json(clinicBusinessTimeData);
   }),
 ];
