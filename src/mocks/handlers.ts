@@ -328,21 +328,25 @@ const taskData = [
   {
     id: 0,
     name: "예약",
+    order: 0,
     subTask: [],
   },
   {
     id: 1,
     name: "접수",
+    order: 1,
     subTask: [],
   },
   {
     id: 2,
     name: "검사",
+    order: 2,
     subTask: [],
   },
   {
     id: 3,
     name: "진료",
+    order: 3,
     subTask: [
       {
         id: 0,
@@ -357,6 +361,7 @@ const taskData = [
   {
     id: 4,
     name: "치료",
+    order: 4,
     subTask: [
       {
         id: 0,
@@ -413,6 +418,10 @@ export const handlers = [
   }),
   http.get("/api/task", ({}) => {
     return HttpResponse.json(taskData);
+  }),
+  http.get("/api/task/:id", ({ params }) => {
+    const { id } = params;
+    return HttpResponse.json(taskData.find((task) => task.id === Number(id)));
   }),
   http.get("/api/schedule", ({}) => {
     return HttpResponse.json(clinicScheduleData);
