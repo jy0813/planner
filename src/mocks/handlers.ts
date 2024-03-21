@@ -1,3 +1,4 @@
+import { OrderChange } from "@/types/task";
 import { http, HttpResponse } from "msw";
 
 const CalendarData = [
@@ -428,5 +429,27 @@ export const handlers = [
   }),
   http.get("/api/business", ({}) => {
     return HttpResponse.json(clinicBusinessTimeData);
+  }),
+  http.patch("/api/task/order", async ({ request }) => {
+    const data = (await request.json()) as OrderChange;
+    const { oldOrder, newOrder } = data;
+    const oldOrderItem = taskData.find((task) => task.order === oldOrder);
+    const newOrderItem = taskData.find((task) => task.order === newOrder);
+    if (oldOrderItem) {
+      oldOrderItem.order = newOrder;
+    }
+    if (newOrderItem) {
+      newOrderItem.order = oldOrder;
+    }
+    if (oldOrderItem === newOrderItem) {
+      return HttpResponse.json(
+        { message: "Task ordering change failed", data: taskData },
+        { status: 400 }
+      );
+    }
+    return HttpResponse.json(
+      { message: "Task ordering changed successfully", data: taskData },
+      { status: 200 }
+    );
   }),
 ];
