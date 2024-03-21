@@ -3,22 +3,26 @@
 import {
   DragEvent,
   MouseEventHandler,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
-  useState,
 } from "react";
 
 import styles from "./TaskReservation.module.scss";
 import getHours from "@/utils/getHours";
-import { useQueries } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQueries } from "@tanstack/react-query";
 import { getTaskData } from "@/service/getTaskData";
 import { TaskData } from "@/types/task";
 import { getClinicBusinessTimeDate } from "@/service/getClinicBusinessTimeData";
+import { taskOrderingChange } from "@/service/taskOrderingChange";
+import { useToast } from "@/hooks/useToast";
 
 const MIN_WIDTH = 100;
 
 const TaskReservation = () => {
+  const queryClient = new QueryClient();
+  const { showToast } = useToast();
   const dragItem = useRef<number | null>(null);
   const dragOverItem = useRef<number | null>(null);
   const parentRef = useRef<HTMLDivElement>(null);
@@ -40,8 +44,6 @@ const TaskReservation = () => {
     ],
   });
 
-  const [managedTaskData, setManagedTaskData] = useState(taskData);
-
   const hours = useMemo(() => {
     if (
       businessTimeData?.businessStartTime ||
@@ -56,10 +58,6 @@ const TaskReservation = () => {
   }, [businessTimeData?.businessEndTime, businessTimeData?.businessStartTime]);
 
   useEffect(() => {
-    setManagedTaskData(taskData);
-  }, [taskData]);
-
-  useEffect(() => {
     if (parentRef.current) {
       const children = Array.from(parentRef.current.children) as HTMLElement[];
       for (let i = 0; i < children.length; i++) {
@@ -70,7 +68,7 @@ const TaskReservation = () => {
         }
       }
     }
-  }, [managedTaskData]);
+  }, [taskData]);
 
   const dragResizeHandler: MouseEventHandler<HTMLDivElement> = (e) => {
     const target = e.currentTarget.parentElement;
@@ -109,41 +107,78 @@ const TaskReservation = () => {
     });
   };
 
-  const dragStartHandler = (e: DragEvent<HTMLDivElement>, position: number) => {
-    dragItem.current = position;
+  const dragStartHandler = (e: DragEvent<HTMLDivElement>, order: number) => {
+    dragItem.current = order;
     console.log((e.target as HTMLDivElement).innerHTML);
   };
 
-  const dragEndHandler = (e: DragEvent<HTMLDivElement>, position: number) => {
-    dragOverItem.current = position;
+  const dragEndHandler = (e: DragEvent<HTMLDivElement>, order: number) => {
+    dragOverItem.current = order;
     console.log((e.target as HTMLDivElement).innerHTML);
   };
+
+  const mutation = useMutation({
+    mutationFn: ({ order, newOrder }: { order: number; newOrder: number }) =>
+      taskOrderingChange(order, newOrder),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["task"],
+      });
+      showToast("success", "변경되었습니다.");
+    },
+    onError: () => {
+      showToast("error", "변경에 실패했습니다.");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["task"],
+      });
+    },
+  });
 
   const drop = () => {
-    const newTaskData = [...managedTaskData];
+    const newTaskData = [...taskData];
     const dragItemValue =
-      dragItem.current !== null ? newTaskData[dragItem.current] : null;
-    if (dragItem.current !== null) {
-      newTaskData.splice(dragItem.current, 1);
+      dragItem.current !== null
+        ? newTaskData.find((task) => task.order === dragItem.current)
+        : null;
+    const dragOverItemValue =
+      dragOverItem.current !== null
+        ? newTaskData.find((task) => task.order === dragOverItem.current)
+        : null;
+
+    if (dragItemValue && dragOverItemValue) {
+      const dragItemIndex = newTaskData.indexOf(dragItemValue);
+      const dragOverItemIndex = newTaskData.indexOf(dragOverItemValue);
+
+      newTaskData[dragItemIndex].order = dragOverItem.current ?? 0;
+      newTaskData[dragOverItemIndex].order = dragItem.current ?? 0;
+
+      mutation.mutate({
+        order: dragItem.current ?? 0,
+        newOrder: dragOverItem.current ?? 0,
+      });
     }
-    newTaskData.splice(dragOverItem.current ?? 0, 0, dragItemValue);
+
     dragItem.current = null;
     dragOverItem.current = null;
-    console.log(newTaskData);
-    setManagedTaskData(newTaskData);
   };
+
+  const taskSortData = taskData
+    ? [...taskData].sort((a, b) => a.order - b.order)
+    : [];
   return (
     <div className={styles.reservationWrap}>
       <div className={styles.reservationTaskArea}>
         <div ref={parentRef} className={styles.reservationTaskHeaderContent}>
-          {managedTaskData?.map((task: TaskData, index: number) => {
+          {taskSortData?.map((task: TaskData) => {
             return (
               <div
                 key={task.id}
                 className={styles.taskHeader}
                 draggable
-                onDragStart={(e) => dragStartHandler(e, index)}
-                onDragEnter={(e) => dragEndHandler(e, index)}
+                onDragStart={(e) => dragStartHandler(e, task.order)}
+                onDragEnter={(e) => dragEndHandler(e, task.order)}
                 onDragEnd={drop}
                 onDragOver={(e) => e.preventDefault()}
               >
