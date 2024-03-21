@@ -2,6 +2,13 @@
   width: 100%;
   margin-top: 10rem;
 
+  .reservationFilterArea {
+    display: flex;
+    column-gap: 3rem;
+    margin-left: 7rem;
+    margin-bottom: 2rem;
+  }
+
   .reservationTaskHeaderContent {
     // display: grid;
     // grid-auto-flow: column;

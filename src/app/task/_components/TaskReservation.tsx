@@ -3,10 +3,10 @@
 import {
   DragEvent,
   MouseEventHandler,
-  useCallback,
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 
 import styles from "./TaskReservation.module.scss";
@@ -17,6 +17,8 @@ import { TaskData } from "@/types/task";
 import { getClinicBusinessTimeDate } from "@/service/getClinicBusinessTimeData";
 import { taskOrderingChange } from "@/service/taskOrderingChange";
 import { useToast } from "@/hooks/useToast";
+import Checkbox from "@/components/Checkbox/Checkbox";
+import FormControlLabel from "@/components/FormControlLabel/FormControlLabel";
 
 const MIN_WIDTH = 100;
 
@@ -167,11 +169,47 @@ const TaskReservation = () => {
   const taskSortData = taskData
     ? [...taskData].sort((a, b) => a.order - b.order)
     : [];
+
+  const [hiddenTasks, setHiddenTasks] = useState<Record<number, boolean>>({});
+
+  useEffect(() => {
+    const storedHiddenTasks = localStorage.getItem("hiddenTasks");
+    if (storedHiddenTasks) {
+      setHiddenTasks(JSON.parse(storedHiddenTasks));
+    }
+  }, []);
+
+  const handleCheckboxChange = (id: number) => {
+    setHiddenTasks((prevState) => {
+      const updatedState = { ...prevState, [id]: !prevState[id] };
+      localStorage.setItem("hiddenTasks", JSON.stringify(updatedState));
+      return updatedState;
+    });
+  };
+
   return (
     <div className={styles.reservationWrap}>
+      <div className={styles.reservationFilterArea}>
+        {taskSortData?.map((task: TaskData) => (
+          <FormControlLabel
+            control={() => (
+              <Checkbox
+                name={task.id.toString()}
+                id={task.id.toString()}
+                checked={!hiddenTasks[task.id]}
+                onChange={() => handleCheckboxChange(task.id)}
+              />
+            )}
+            label={task.name}
+            name={task.id.toString()}
+            key={task.id}
+          />
+        ))}
+      </div>
       <div className={styles.reservationTaskArea}>
         <div ref={parentRef} className={styles.reservationTaskHeaderContent}>
           {taskSortData?.map((task: TaskData) => {
+            if (hiddenTasks[task.id]) return null;
             return (
               <div
                 key={task.id}
