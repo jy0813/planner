@@ -1,0 +1,10 @@
+.labelWrap {
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+
+  span {
+    font-size: 1.6rem;
+    font-weight: 500;
+  }
+}
