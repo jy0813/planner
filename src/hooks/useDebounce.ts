@@ -1,17 +1,17 @@
-const useDebounce = <T extends (...args: any[]) => any>(
-  fn: T,
-  delay: number
-) => {
-  let timeout: ReturnType<typeof setTimeout>;
+import { useRef } from "react";
 
-  return (...args: Parameters<T>): ReturnType<T> => {
-    let result: any;
-    if (timeout) clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      result = fn(...args);
-    }, delay);
-    return result;
+export const useDebounce = <T extends any[]>(
+  callback: (...params: T) => void,
+  time: number
+) => {
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  return (...params: T) => {
+    if (timer.current) clearTimeout(timer.current);
+
+    timer.current = setTimeout(() => {
+      callback(...params);
+      console.log(timer.current, "timer.current");
+      timer.current = null;
+    }, time);
   };
 };
-
-export default useDebounce;
