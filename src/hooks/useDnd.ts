@@ -1,14 +1,13 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-interface DndProps {
-  order: number;
-  [key: string]: any;
-}
-
-export const useDnd = (initialData: DndProps[]) => {
-  const [dragData, setDragData] = useState(initialData);
+export const useDnd = <T extends { order: number }>(initialData: T[]) => {
+  const [dragData, setDragData] = useState<T[]>(initialData);
   const dragItem = useRef<number | null>(null);
   const dragOverItem = useRef<number | null>(null);
+
+  useEffect(() => {
+    setDragData(initialData);
+  }, [initialData]);
 
   const onDragStart = useCallback(
     (e: React.DragEvent<HTMLDivElement>, order: number) => {
@@ -46,6 +45,8 @@ export const useDnd = (initialData: DndProps[]) => {
 
       setDragData(newData);
     }
+
+    console.log(dragItem.current, dragOverItem.current);
     return { order: dragItem.current, newOrder: dragOverItem.current };
   }, [dragData]);
 
