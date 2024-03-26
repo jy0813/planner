@@ -10,17 +10,16 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import { addMonths, format, isToday, setDate, subMonths } from "date-fns";
+import { addMonths, format, isToday, subMonths } from "date-fns";
 import styles from "./CalendarDashboard.module.scss";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
-import { FaArrowAltCircleLeft, FaRegArrowAltCircleRight } from "react-icons/fa";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { getCalendarData } from "@/service/getCalendarData";
 import { CalendarData } from "@/types/calendar";
-import useDialog from "@/hooks/useDialog";
-import useDebounce from "@/hooks/useDebounce";
+import { useThrottle } from "@/hooks/useThrottle";
 
 type CalendarContextType = ReturnType<typeof useCalendar>;
 const CalendarContext = createContext<CalendarContextType | undefined>(
@@ -126,13 +125,14 @@ const CalendarBody = () => {
     setCurrentDate(addMonths(currentDate, 1));
   };
 
-  const handleWheel = useDebounce((e) => {
+  const handleWheel = useThrottle((e) => {
+    console.log(e);
     if (e.deltaY < 0) {
       nextMonthMove();
     } else {
       prevMonthMove();
     }
-  }, 200);
+  }, 500);
 
   const handleCtrlClick = (e: MouseEvent<HTMLDivElement>, date: Date) => {
     setShowMemoBox(false);

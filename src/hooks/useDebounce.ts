@@ -10,7 +10,6 @@ export const useDebounce = <T extends any[]>(
 
     timer.current = setTimeout(() => {
       callback(...params);
-      console.log(timer.current, "timer.current");
       timer.current = null;
     }, time);
   };
