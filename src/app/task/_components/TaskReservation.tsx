@@ -46,6 +46,16 @@ const TaskReservation = () => {
     ],
   });
 
+  const [hiddenTasks, setHiddenTasks] = useState<Record<number, boolean>>({});
+
+  const handleCheckboxChange = (id: number) => {
+    setHiddenTasks((prevState) => {
+      const updatedState = { ...prevState, [id]: !prevState[id] };
+      localStorage.setItem("hiddenTasks", JSON.stringify(updatedState));
+      return updatedState;
+    });
+  };
+
   const hours = useMemo(() => {
     if (
       businessTimeData?.businessStartTime ||
@@ -64,11 +74,11 @@ const TaskReservation = () => {
       const children = Array.from(parentRef.current.children) as HTMLElement[];
       for (let i = 0; i < children.length; i++) {
         if (i < children.length) {
-          console.log(children[i].clientWidth);
           children[i].style.width = `${children[i].clientWidth / 10}rem`;
           children[i].style.flex = "0 1 auto";
         }
       }
+      console.log(children.length, "getTaskData");
     }
   }, [taskData]);
 
@@ -91,8 +101,6 @@ const TaskReservation = () => {
       const width = Math.max(MIN_WIDTH, left - initialLeft);
       target.style.width = `${width / 10}rem`;
       target.style.flex = "0 1 auto";
-
-      console.log(initialLeft, left, width);
     };
 
     document.addEventListener("mousemove", resize);
@@ -111,12 +119,10 @@ const TaskReservation = () => {
 
   const dragStartHandler = (e: DragEvent<HTMLDivElement>, order: number) => {
     dragItem.current = order;
-    console.log((e.target as HTMLDivElement).innerHTML);
   };
 
   const dragEndHandler = (e: DragEvent<HTMLDivElement>, order: number) => {
     dragOverItem.current = order;
-    console.log((e.target as HTMLDivElement).innerHTML);
   };
 
   const mutation = useMutation({
@@ -170,27 +176,27 @@ const TaskReservation = () => {
     ? [...taskData].sort((a, b) => a.order - b.order)
     : [];
 
-  const [hiddenTasks, setHiddenTasks] = useState<Record<number, boolean>>({});
-
   useEffect(() => {
     const storedHiddenTasks = localStorage.getItem("hiddenTasks");
     if (storedHiddenTasks) {
       setHiddenTasks(JSON.parse(storedHiddenTasks));
     }
+    if (storedHiddenTasks && parentRef.current) {
+      const children = Array.from(parentRef.current.children) as HTMLElement[];
+      for (let i = 0; i < children.length; i++) {
+        if (i < children.length) {
+          children[i].style.width = `${children[i].clientWidth / 10}rem`;
+          // children[i].style.flex = "1 0 auto";
+        }
+      }
+      console.log(children.length, "localStorage");
+    }
   }, []);
-
-  const handleCheckboxChange = (id: number) => {
-    setHiddenTasks((prevState) => {
-      const updatedState = { ...prevState, [id]: !prevState[id] };
-      localStorage.setItem("hiddenTasks", JSON.stringify(updatedState));
-      return updatedState;
-    });
-  };
 
   return (
     <div className={styles.reservationWrap}>
       <div className={styles.reservationFilterArea}>
-        {taskSortData?.map((task: TaskData) => (
+        {taskData?.map((task: TaskData) => (
           <FormControlLabel
             control={() => (
               <Checkbox
@@ -198,6 +204,7 @@ const TaskReservation = () => {
                 id={task.id.toString()}
                 checked={!hiddenTasks[task.id]}
                 onChange={() => handleCheckboxChange(task.id)}
+                disabled={task.id === 0}
               />
             )}
             label={task.name}

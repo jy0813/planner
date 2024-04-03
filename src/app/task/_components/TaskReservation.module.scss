@@ -9,95 +9,106 @@
     margin-bottom: 2rem;
   }
 
-  .reservationTaskHeaderContent {
-    // display: grid;
-    // grid-auto-flow: column;
-    // grid-template-columns: repeat(auto-fit, minmax(0, auto));
-    display: flex;
-    min-width: max-content;
-    margin-left: 7rem;
+  .reservationTaskArea {
+    overflow-x: auto;
 
-    .taskHeader {
-      flex: 1 0 auto;
-      min-width: 100px;
-      position: relative;
+    .reservationTaskHeaderContent {
+      // display: grid;
+      // grid-auto-flow: column;
+      // grid-template-columns: repeat(auto-fit, minmax(0, auto));
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background-color: #efefef;
-      border: 0.1rem solid #ccc;
-      border-right: none;
-      &::after {
-        position: absolute;
-        content: "";
-        width: 0.1rem;
-        height: 100%;
-        right: 0;
-        background-color: #ccc;
-      }
+      width: max-content;
+      min-width: calc(100dvw - 11.4rem);
+      margin-left: 7rem;
+      box-sizing: content-box;
 
-      &:hover {
-        cursor: move;
-      }
-
-      &:last-of-type {
-        border-right: none;
-      }
-
-      span {
-        font-size: 2rem;
-        font-weight: 700;
-        padding: 1rem;
-      }
-
-      .resizeDragArea {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 2rem;
-        height: 100%;
-        cursor: col-resize;
-      }
-
-      .subTaskHeaderArea {
-        overflow: hidden;
-        display: grid;
-        grid-auto-flow: column;
-        grid-template-columns: repeat(auto-fit, minmax(0, auto));
-        width: 100%;
-
-        .subTaskHeader {
+      .taskHeaderWrap {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        .taskHeader {
+          flex: 1 0 auto;
+          min-width: 100px;
+          position: relative;
           display: flex;
+          flex-direction: column;
           justify-content: center;
           align-items: center;
-          border-top: 0.1rem solid #ccc;
-          border-right: 0.1rem solid #ccc;
-          text-align: center;
+          background-color: #efefef;
+          border: 0.1rem solid #ccc;
+          border-right: none;
+          &::after {
+            position: absolute;
+            content: "";
+            width: 0.1rem;
+            height: 100%;
+            right: 0;
+            background-color: #ccc;
+          }
+
+          &:hover {
+            cursor: move;
+          }
+
           &:last-of-type {
             border-right: none;
           }
 
           span {
-            overflow: hidden;
-            width: 100%;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            font-size: 2rem;
+            font-weight: 700;
+            padding: 1rem;
           }
+
+          .subTaskHeaderArea {
+            overflow: hidden;
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-columns: repeat(auto-fit, minmax(0, auto));
+            width: 100%;
+
+            .subTaskHeader {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border-top: 0.1rem solid #ccc;
+              border-right: 0.1rem solid #ccc;
+              text-align: center;
+              &:last-of-type {
+                border-right: none;
+              }
+
+              span {
+                overflow: hidden;
+                width: 100%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+            }
+          }
+        }
+
+        .resizeDragArea {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 2rem;
+          height: 100%;
+          cursor: col-resize;
         }
       }
     }
-  }
 
-  .reservationTaskBodyContent {
-    .reservationTimeArea {
-      display: flex;
-      flex-direction: column;
-      height: fit-content;
-      font-size: 1.4rem;
+    .reservationTaskBodyContent {
+      .reservationTimeArea {
+        display: flex;
+        flex-direction: column;
+        height: fit-content;
+        font-size: 1.4rem;
 
-      .reservationTime {
-        min-height: 5rem;
+        .reservationTime {
+          min-height: 5rem;
+        }
       }
     }
   }

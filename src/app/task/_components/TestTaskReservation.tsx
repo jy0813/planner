@@ -14,14 +14,13 @@ import Checkbox from "@/components/Checkbox/Checkbox";
 import { useResizable } from "@/hooks/useResizeable";
 import getHours from "@/utils/getHours";
 import { useResizeTask } from "@/hooks/useResizeTask";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const TestTaskReservation = () => {
   const { showToast } = useToast();
   const parentRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
-  const [hiddenTasks, setHiddenTasks] = useState<Record<number, boolean>>(() =>
-    JSON.parse(localStorage.getItem("hiddenTasks") || "{}")
-  );
+
   const [{ data: taskData }, { data: businessTimeData }] = useQueries({
     queries: [
       {
@@ -70,6 +69,10 @@ const TestTaskReservation = () => {
 
   const { position, size, onMouseDown, onResizeMouseDown } = useResizable();
 
+  const [hiddenTasks, setHiddenTasks] = useLocalStorage<
+    Record<number, boolean>
+  >("hiddenTasks", {});
+
   useEffect(() => {
     if (parentRef.current && dragData) {
       const children = Array.from(parentRef.current.children) as HTMLElement[];
@@ -83,31 +86,8 @@ const TestTaskReservation = () => {
     }
   }, [dragData, hiddenTasks]);
 
-  useEffect(() => {
-    if (taskData) {
-      const storedHiddenTasks = JSON.parse(
-        localStorage.getItem("hiddenTasks") || "{}"
-      );
-
-      const initialHiddenTasks = taskData.reduce(
-        (acc: Record<number, boolean>, task: { id: number }) => {
-          acc[task.id] = storedHiddenTasks[task.id] ?? false;
-          return acc;
-        },
-        {}
-      );
-
-      setHiddenTasks(initialHiddenTasks);
-      localStorage.setItem("hiddenTasks", JSON.stringify(initialHiddenTasks));
-    }
-  }, [taskData]);
-
   const handleCheckboxChange = (id: number) => {
-    setHiddenTasks((prevState) => {
-      const updatedState = { ...prevState, [id]: !prevState[id] };
-      localStorage.setItem("hiddenTasks", JSON.stringify(updatedState));
-      return updatedState;
-    });
+    setHiddenTasks({ ...hiddenTasks, [id]: !hiddenTasks[id] });
   };
 
   const onDragEnd = () => {
@@ -162,26 +142,37 @@ const TestTaskReservation = () => {
               return (
                 <div
                   key={task.id}
-                  className={styles.taskHeader}
                   draggable={!isResizing}
                   onDragStart={(e) => onDragStart(e, task.order)}
                   onDragEnter={(e) => onDragEnter(e, task.order)}
                   onDragOver={onDragOver}
                   onDragEnd={onDragEnd}
+                  className={styles.taskHeaderWrap}
                 >
-                  <span>{task.name}</span>
+                  <div className={styles.taskHeader}>
+                    <span>{task.name}</span>
+                    <div className={styles.subTaskHeaderArea}>
+                      {task.subTask.map((subTask) => {
+                        return (
+                          <div
+                            key={subTask.id}
+                            className={styles.subTaskHeader}
+                          >
+                            <span>{subTask.name}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                   <div
                     onMouseDown={onResizeStart}
                     className={styles.resizeDragArea}
                   ></div>
-                  <div className={styles.subTaskHeaderArea}>
-                    {task.subTask.map((subTask) => {
-                      return (
-                        <div key={subTask.id} className={styles.subTaskHeader}>
-                          <span>{subTask.name}</span>
-                        </div>
-                      );
-                    })}
+                  <div
+                    className={styles.gridLineWrap}
+                    style={{ fontSize: "1.6rem" }}
+                  >
+                    {task.id} 타임존 API 들어갈 자리
                   </div>
                 </div>
               );
